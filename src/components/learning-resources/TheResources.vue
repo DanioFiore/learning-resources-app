@@ -12,7 +12,7 @@
     >
   </base-card>
   <keep-alive>
-    <component :is="selectedTab" @adding-resource="addResource"></component>
+    <component :is="selectedTab"></component>
   </keep-alive>
 </template>
 
@@ -57,6 +57,7 @@ export default {
     return {
       resources: this.storedResources,
       addResource: this.addResource,
+      deleteResource: this.deleteResource,
     };
   },
 
@@ -74,6 +75,12 @@ export default {
       });
       this.selectedTab = 'stored-resources';
     },
+
+    deleteResource() {
+         const resIndex = this.storedResources.findIndex(res => res.id)
+         this.storedResources.splice(resIndex, 1);
+
+    }
   },
 };
 </script>

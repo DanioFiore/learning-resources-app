@@ -1,42 +1,79 @@
 <template>
   <base-card>
-    <form @submit.prevent="fetchData">
-      <div class="form-control">
-        <label for="title">Title</label>
-        <input type="text" name="title" id="title" ref="inputTitle" />
-      </div>
-      <div class="form-control">
-        <label for="description">Description</label>
-        <textarea name="description" id="description" rows="3" ref="inputDescription" ></textarea>
-      </div>
-      <div class="form-control">
-        <label for="link">Link</label>
-        <input type="url" name="link" id="link" ref="inputLink" />
-      </div>
-      <base-button type="submit">Submit</base-button>
-    </form>
+    <template #default>
+      <teleport to="body">
+        <base-dialog v-if="isInputInvalid" title="Invalid Input" @close="closeDialog">
+          <template #default>
+            <p>Unfortunatly, at least one input value is invalid.</p>
+            <p>
+              Please check all inputs and make sure you enter at least a few
+              characters into each input field.
+            </p>
+          </template>
+          <template #actions>
+            <base-button @click="closeDialog">Okay</base-button>
+          </template>
+        </base-dialog>
+      </teleport>
+      <form @submit.prevent="fetchData">
+        <div class="form-control">
+          <label for="title">Title</label>
+          <input type="text" name="title" id="title" ref="inputTitle" />
+        </div>
+        <div class="form-control">
+          <label for="description">Description</label>
+          <textarea
+            name="description"
+            id="description"
+            rows="3"
+            ref="inputDescription"
+          ></textarea>
+        </div>
+        <div class="form-control">
+          <label for="link">Link</label>
+          <input type="url" name="link" id="link" ref="inputLink" />
+        </div>
+        <base-button type="submit">Submit</base-button>
+      </form>
+    </template>
   </base-card>
 </template>
 
 <script>
 export default {
-    inject: ['addResource'], 
+  data() {
+    return {
+      isInputInvalid: false,
+    };
+  },
 
-    methods: {
-        fetchData() {
-            const newId = Math.floor(Math.random() * (100 - 3) + 3);
-            const enteredTitle = this.$refs.inputTitle.value;
-            const enteredDescription= this.$refs.inputDescription.value;
-            const enteredLink = this.$refs.inputLink.value;
+  inject: ['addResource'],
 
-            this.addResource(newId, enteredTitle, enteredDescription, enteredLink);
-            
-            this.$refs.inputTitle.value = '';
-            this.$refs.inputDescription.value = '';
-            this.$refs.inputLink.value = '';
-        }
-    }
-}
+  methods: {
+    fetchData() {
+      const newId = Math.floor(Math.random() * (100 - 3) + 3);
+      const enteredTitle = this.$refs.inputTitle.value;
+      const enteredDescription = this.$refs.inputDescription.value;
+      const enteredLink = this.$refs.inputLink.value;
+      if (
+        enteredTitle.trim() === '' ||
+        enteredDescription.trim() === '' ||
+        enteredLink.trim() === ''
+      ) {
+        return (this.isInputInvalid = true);
+      }
+      this.addResource(newId, enteredTitle, enteredDescription, enteredLink);
+
+      this.$refs.inputTitle.value = '';
+      this.$refs.inputDescription.value = '';
+      this.$refs.inputLink.value = '';
+    },
+
+    closeDialog() {
+      return (this.isInputInvalid = false);
+    },
+  },
+};
 </script>
 
 <style scoped>
