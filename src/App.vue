@@ -1,33 +1,52 @@
 <template>
-    <ul>
-        <learning-resource v-for="resource in storedResources" :key="resource.id" :id="resource.id" :title="resource.title" :description="resource.description" :link="resource.link"></learning-resource>
-    </ul>
+    <the-header>
+        <template v-slot:default>
+            Learning Resources
+        </template>
+    </the-header>
+    <stored-resources :resources="storedResources"></stored-resources>
 </template>
 
 <script>
-import LearningResource from './components/learning-resources/LearningResource.vue';
+import StoredResources from './components/learning-resources/StoredResources.vue';
 
 export default {
-    components: {
-        LearningResource,
-    },
-    data() {
-        return {
-            storedResources: [
-                {
-                    id: 'vue-guide',
-                    title: 'Vue Official Guide',
-                    description: 'The official guide of vue.js',
-                    link: 'https://vuejs.org',
-                },
-                {
-                    id: 'google',
-                    title: 'Google',
-                    description: 'Learn to google',
-                    link: 'https://google.com',
-                }
-            ]
-        }
-    }
-}
+ components: {
+    StoredResources,
+ },
+  data() {
+    return {
+      storedResources: [
+        {
+          id: 'vue-guide',
+          title: 'Vue Official Guide',
+          description: 'The official guide of vue.js',
+          link: 'https://vuejs.org',
+        },
+        {
+          id: 'google',
+          title: 'Google',
+          description: 'Learn to google',
+          link: 'https://google.com',
+        },
+      ],
+    };
+  },
+};
 </script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  margin: 0;
+}
+</style>
